@@ -34,6 +34,49 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     else:
         logger.warning("ML model not loaded — using rule-based predictions")
 
+    from app.database.session import SessionLocal
+    import app.models
+    from app.models.report import Report
+    from app.models.site import Site
+    from app.models.department import Department
+    from scripts.seed_database import DATA_PATH
+    import json
+
+    db = SessionLocal()
+    existing = db.query(Report).count()
+    if existing == 0:
+        logger.info("Database empty — seeding with synthetic reports...")
+        with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        reports = data["reports"] if isinstance(data, dict) else data
+        for r in reports:
+            site_q = db.query(Site).filter(Site.name == r["site"]).first()
+            if not site_q:
+                site_q = Site(name=r["site"], code=r["site"].replace(" ", "_").upper()[:20], location="Assam, India")
+                db.add(site_q)
+                db.flush()
+            dept_q = db.query(Department).filter(Department.site_id == site_q.id, Department.name == r["department"]).first()
+            if not dept_q:
+                dept_q = Department(site_id=site_q.id, name=r["department"], code=f"{site_q.code}_{r['department'].replace(' ', '_').upper()}"[:50])
+                db.add(dept_q)
+                db.flush()
+            report = Report(
+                report_text=r["report_text"],
+                report_type=r["report_type"],
+                site_id=site_q.id,
+                dept_id=dept_q.id,
+                is_synthetic=str(r.get("is_synthetic", "true")).lower() == "true",
+                hazard_type=r.get("hazard_type"),
+                work_type=r.get("work_type"),
+            )
+            db.add(report)
+        db.commit()
+        total = db.query(Report).count()
+        logger.info("Seeded %d reports into database", total)
+    else:
+        logger.info("Database has %d reports — skipping seed", existing)
+    db.close()
+
     yield
     logger.info("Shutting down %s", settings.APP_NAME)
 
