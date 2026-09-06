@@ -40,6 +40,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://10.30.252.39:5173",
         "http://10.30.252.39:8000",
+        "https://frontend-q3t8tqmcl-harshhardwork23-2962s-projects.vercel.app",
+        "https://frontend-nine-liart-71.vercel.app",
     ]
 
     # Logging

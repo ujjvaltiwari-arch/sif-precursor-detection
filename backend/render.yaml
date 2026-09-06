@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sif-precursor-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        value: '["https://frontend-q3t8tqmcl-harshhardwork23-2962s-projects.vercel.app","http://localhost:5173"]'
+      - key: LOG_LEVEL
+        value: INFO
