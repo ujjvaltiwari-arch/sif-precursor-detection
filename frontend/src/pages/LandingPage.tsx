@@ -612,11 +612,11 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 max-w-[900px] mx-auto">
             {[
-              { name: 'Ujjval Tiwari', role: 'AI/ML Lead', init: 'UT', color: 'from-cyan-500 to-blue-600' },
+              { name: 'Aina Raj', role: 'Frontend Dev', init: 'AR', color: 'from-green-500 to-emerald-600' },
               { name: 'Raj Maurya', role: 'NLP Engineer', init: 'RM', color: 'from-blue-500 to-indigo-600' },
               { name: 'Mohit Rajput', role: 'Domain Expert', init: 'MR', color: 'from-purple-500 to-pink-600' },
               { name: 'Rishabh & Ashish', role: 'Backend Dev', init: 'RA', color: 'from-amber-500 to-orange-600' },
-              { name: 'Aina Raj', role: 'Frontend Dev', init: 'AR', color: 'from-green-500 to-emerald-600' },
+              { name: 'Ujjval Tiwari', role: 'AI/ML Lead', init: 'UT', color: 'from-cyan-500 to-blue-600' },
             ].map((m, i) => (
               <div key={i} className="glass rounded-xl p-5 border border-white/5 hover:border-white/15 transition-all duration-300 text-center group">
                 <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${m.color} flex items-center justify-center mx-auto mb-3 text-lg font-black text-white group-hover:scale-110 transition-transform`}>
