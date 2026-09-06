@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00"/>
+      <stop offset="50%" stop-color="#FF6B00"/>
+      <stop offset="100%" stop-color="#E85D00"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0052A5"/>
+      <stop offset="50%" stop-color="#0066CC"/>
+      <stop offset="100%" stop-color="#0080FF"/>
+    </linearGradient>
+    <linearGradient id="darkBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002855"/>
+      <stop offset="100%" stop-color="#003D7A"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Left orange chevron -->
+  <path d="M40 150 L95 30 L110 30 L65 150 Z" fill="url(#orangeGrad)"/>
+  
+  <!-- Left orange accent -->
+  <path d="M55 150 L100 50 L115 50 L75 150 Z" fill="#FF9933" opacity="0.8"/>
+  
+  <!-- Right blue chevron -->
+  <path d="M90 150 L145 30 L160 30 L115 150 Z" fill="url(#blueGrad)"/>
+  
+  <!-- Right blue arrow tip -->
+  <path d="M135 30 L170 30 L155 60 Z" fill="#0066CC"/>
+  
+  <!-- Dark blue base -->
+  <path d="M75 155 L105 80 L135 155 Z" fill="url(#darkBlueGrad)"/>
+  
+  <!-- Circuit traces - left -->
+  <circle cx="35" cy="70" r="3" fill="#FF8C00" opacity="0.7"/>
+  <line x1="35" y1="73" x2="35" y2="90" stroke="#FF8C00" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="35" cy="93" r="2.5" fill="#FF8C00" opacity="0.6"/>
+  <line x1="35" y1="96" x2="45" y2="110" stroke="#FF8C00" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="48" cy="113" r="2" fill="#FF8C00" opacity="0.5"/>
+  
+  <!-- Circuit traces - right -->
+  <circle cx="165" cy="70" r="3" fill="#0066CC" opacity="0.7"/>
+  <line x1="165" y1="73" x2="165" y2="90" stroke="#0066CC" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="165" cy="93" r="2.5" fill="#0066CC" opacity="0.6"/>
+  <line x1="165" y1="96" x2="155" y2="110" stroke="#0066CC" stroke-width="1.5" opacity="0.4"/>
+  <circle cx="152" cy="113" r="2" fill="#0066CC" opacity="0.5"/>
+  
+  <!-- Circuit traces - bottom -->
+  <circle cx="60" cy="160" r="2" fill="#0052A5" opacity="0.5"/>
+  <line x1="63" y1="160" x2="80" y2="155" stroke="#0052A5" stroke-width="1" opacity="0.4"/>
+  <circle cx="140" cy="160" r="2" fill="#0052A5" opacity="0.5"/>
+  <line x1="137" y1="160" x2="120" y2="155" stroke="#0052A5" stroke-width="1" opacity="0.4"/>
+</svg>

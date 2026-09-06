@@ -1,0 +1,10 @@
+{
+  "model_type": "logistic_regression",
+  "classes": [
+    "HIGH",
+    "LOW",
+    "MEDIUM"
+  ],
+  "n_features": 994,
+  "trained": true
+}
