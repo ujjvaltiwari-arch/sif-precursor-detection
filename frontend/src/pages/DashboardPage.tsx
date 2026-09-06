@@ -237,7 +237,7 @@ export default function DashboardPage() {
 
           {/* 3D AI Visualization + Risk Gauge */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass p-5 gradient-border overflow-hidden" style={{ height: '360px' }}>
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass p-5 gradient-border overflow-hidden h-[280px] sm:h-[360px]">
               <div className="flex items-center justify-between mb-3 relative z-10">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                   <Brain className="w-3.5 h-3.5 text-brand-400" />
@@ -494,10 +494,10 @@ export default function DashboardPage() {
                 { title: 'Fire Detection Alert - Warehouse W-2', severity: 'HIGH', time: '2 hours ago', dept: 'Maintenance' },
               ].map((alert, i) => (
                 <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${alert.severity === 'HIGH' ? 'bg-danger-500 animate-pulse' : 'bg-warn-500'}`} />
-                    <div>
-                      <div className="text-sm text-white font-medium">{alert.title}</div>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${alert.severity === 'HIGH' ? 'bg-danger-500 animate-pulse' : 'bg-warn-500'}`} />
+                    <div className="min-w-0">
+                      <div className="text-sm text-white font-medium truncate">{alert.title}</div>
                       <div className="text-xs text-slate-500 mt-0.5">{alert.dept} · {alert.time}</div>
                     </div>
                   </div>

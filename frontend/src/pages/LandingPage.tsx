@@ -237,7 +237,7 @@ export default function LandingPage() {
 
               {/* Quick stats row */}
               <motion.div variants={fadeUp} initial="hidden" animate="visible" custom={4}
-                className="flex gap-8 text-center"
+                className="flex flex-wrap gap-6 sm:gap-8 text-center justify-center"
               >
                 {[
                   { v: '250+', l: 'Reports Analyzed', c: 'text-cyan-400' },
@@ -314,7 +314,7 @@ export default function LandingPage() {
           </div>
 
           {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden sm:block">
             <button onClick={() => scrollTo(CHALLENGE_REF)}
               className="flex flex-col items-center gap-2 text-white/25 hover:text-white/50 transition-colors"
             >

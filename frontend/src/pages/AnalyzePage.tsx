@@ -222,7 +222,7 @@ export default function AnalyzePage() {
           <button
             onClick={handleSubmit}
             disabled={loading || !text.trim()}
-            className="btn-3d btn-3d-primary py-2 px-6 text-xs ml-auto disabled:opacity-40 disabled:cursor-not-allowed"
+            className="btn-3d btn-3d-primary py-2 px-6 text-xs ml-auto w-full sm:w-auto disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? (
               <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Analyzing...</>

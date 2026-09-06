@@ -19,6 +19,7 @@ const sidebarLinks = [
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -27,6 +28,13 @@ export default function DashboardLayout() {
   useEffect(() => {
     setMobileOpen(false);
   }, [location]);
+
+  // Track screen width for responsive sidebar padding
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const SIDEBAR_WIDTH = collapsed ? 72 : 260;
 
@@ -55,17 +63,10 @@ export default function DashboardLayout() {
           background: 'rgba(4, 7, 15, 0.98)',
           borderRight: '1px solid rgba(100, 116, 139, 0.15)',
           boxShadow: '4px 0 24px rgba(0, 0, 0, 0.4)',
-          transform: mobileOpen ? 'translateX(0)' : undefined,
+          transform: isMobile ? (mobileOpen ? 'translateX(0)' : 'translateX(-100%)') : undefined,
           transition: 'width 0.3s ease, transform 0.3s ease',
         }}
       >
-        {/* Mobile transform override */}
-        <style>{`
-          @media (max-width: 1023px) {
-            aside { transform: ${mobileOpen ? 'translateX(0)' : 'translateX(-100%)'} !important; }
-          }
-        `}</style>
-
         {/* Logo */}
         <Link to="/" className={`h-[64px] flex items-center border-b border-white/[0.08] px-4 shrink-0 no-underline hover:bg-white/[0.03] transition-colors ${collapsed ? 'justify-center' : 'gap-2.5'}`}>
           <img
@@ -172,7 +173,7 @@ export default function DashboardLayout() {
       {/* Main content - uses padding-left instead of margin-left for reliable shifting */}
       <div
         className="flex-1 flex flex-col min-h-screen"
-        style={{ paddingLeft: SIDEBAR_WIDTH, transition: 'padding-left 0.3s ease' }}
+        style={{ paddingLeft: isMobile ? 0 : SIDEBAR_WIDTH, transition: 'padding-left 0.3s ease' }}
       >
         {/* Top bar */}
         <header

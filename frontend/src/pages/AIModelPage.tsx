@@ -171,7 +171,7 @@ export default function AIModelPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass p-5 gradient-border overflow-hidden" style={{ height: '380px' }}>
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="glass p-5 gradient-border overflow-hidden h-[280px] sm:h-[380px]">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                   <Brain className="w-3.5 h-3.5 text-brand-400" /> AI Core Visualization
@@ -264,7 +264,7 @@ export default function AIModelPage() {
             <div className="space-y-3">
               {featureImportance.map((f, i) => (
                 <motion.div key={f.feature} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.03 }} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400 w-40 shrink-0">{f.feature}</span>
+                  <span className="text-xs text-slate-400 w-28 sm:w-40 shrink-0 truncate">{f.feature}</span>
                   <div className="flex-1 h-2.5 rounded-full bg-white/[0.03] overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${f.importance * 100}%` }} transition={{ delay: 0.4 + i * 0.03, duration: 0.6 }} className="h-full rounded-full bg-gradient-to-r from-brand-500 to-purple-500" />
                   </div>

@@ -178,10 +178,10 @@ export default function RiskInsightsPage() {
               onClick={() => setSelectedAlert(selectedAlert === alert.id ? null : alert.id)}
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${alert.severity === 'HIGH' ? 'bg-danger-500 animate-pulse' : alert.severity === 'MEDIUM' ? 'bg-warn-500' : 'bg-success-500'}`} />
-                  <div>
-                    <div className="text-sm text-white font-medium">{alert.title}</div>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className={`w-2 h-2 rounded-full shrink-0 ${alert.severity === 'HIGH' ? 'bg-danger-500 animate-pulse' : alert.severity === 'MEDIUM' ? 'bg-warn-500' : 'bg-success-500'}`} />
+                  <div className="min-w-0">
+                    <div className="text-sm text-white font-medium truncate">{alert.title}</div>
                     <div className="text-xs text-slate-500 mt-0.5">{alert.dept} · {alert.site} · {alert.time}</div>
                   </div>
                 </div>

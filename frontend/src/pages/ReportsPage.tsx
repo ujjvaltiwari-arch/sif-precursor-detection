@@ -98,7 +98,7 @@ export default function ReportsPage() {
             <div className="text-slate-500 animate-pulse text-sm">Loading reports...</div>
           </div>
         ) : (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass overflow-hidden gradient-border">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass overflow-x-auto gradient-border">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/5">
