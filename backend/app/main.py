@@ -39,12 +39,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     from app.models.report import Report
     from app.models.site import Site
     from app.models.department import Department
-    from scripts.seed_database import DATA_PATH
     import json
+    from pathlib import Path
+
+    DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "synthetic" / "synthetic_reports.json"
 
     db = SessionLocal()
     existing = db.query(Report).count()
-    if existing == 0:
+    if existing == 0 and DATA_PATH.exists():
         logger.info("Database empty — seeding with synthetic reports...")
         with open(DATA_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
