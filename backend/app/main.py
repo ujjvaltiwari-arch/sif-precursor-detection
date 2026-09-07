@@ -60,11 +60,23 @@ def _seed_database():
                 dept_q = Department(site_id=site_q.id, name=r["department"], code=f"{site_q.code}_{r['department'].replace(' ', '_').upper()}"[:50])
                 db.add(dept_q)
                 db.flush()
+            from datetime import date as _date
+            report_date = None
+            raw_date = r.get("date")
+            if raw_date:
+                try:
+                    report_date = _date.fromisoformat(str(raw_date))
+                except (ValueError, TypeError):
+                    report_date = _date.today()
+            else:
+                report_date = _date.today()
+
             report = Report(
                 report_text=r["report_text"],
                 report_type=r["report_type"],
                 site_id=site_q.id,
                 dept_id=dept_q.id,
+                date=report_date,
                 is_synthetic=str(r.get("is_synthetic", "true")).lower() == "true",
                 hazard_type=r.get("hazard_type"),
                 work_type=r.get("work_type"),
