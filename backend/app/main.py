@@ -20,37 +20,35 @@ from app.database.session import init_db
 logger = setup_logging()
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Application lifespan: startup and shutdown events."""
-    logger.info("Starting %s v%s", settings.APP_NAME, settings.APP_VERSION)
-    init_db()
-    logger.info("Database initialized")
-
-    from app.ml.pipeline import prediction_service
-    prediction_service.load_model()
-    if prediction_service.is_loaded:
-        logger.info("ML model loaded successfully")
-    else:
-        logger.warning("ML model not loaded — using rule-based predictions")
-
+def _seed_database():
+    """Seed the database with synthetic reports. Called on startup and via /api/v1/admin/seed."""
     from app.database.session import SessionLocal
-    import app.models
+    import app.models  # noqa: F401 — ensure all models are registered
     from app.models.report import Report
     from app.models.site import Site
     from app.models.department import Department
+    from app.models.prediction import Prediction
     import json
     from pathlib import Path
 
     DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "synthetic" / "synthetic_reports.json"
 
     db = SessionLocal()
-    existing = db.query(Report).count()
-    if existing == 0 and DATA_PATH.exists():
-        logger.info("Database empty — seeding with synthetic reports...")
+    try:
+        existing = db.query(Report).count()
+        if existing > 0:
+            logger.info("Database has %d reports — skipping seed", existing)
+            return {"status": "skipped", "count": existing}
+
+        if not DATA_PATH.exists():
+            logger.warning("Seed data file not found at %s", DATA_PATH)
+            return {"status": "error", "message": f"Seed file not found: {DATA_PATH}"}
+
+        logger.info("Database empty — seeding with synthetic reports from %s ...", DATA_PATH)
         with open(DATA_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
         reports = data["reports"] if isinstance(data, dict) else data
+        seeded = 0
         for r in reports:
             site_q = db.query(Site).filter(Site.name == r["site"]).first()
             if not site_q:
@@ -72,12 +70,46 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                 work_type=r.get("work_type"),
             )
             db.add(report)
+            db.flush()
+
+            risk_level = r.get("risk_level", "LOW")
+            prediction = Prediction(
+                report_id=report.id,
+                risk_level=risk_level,
+                confidence_score=0.85 if risk_level == "HIGH" else 0.65 if risk_level == "MEDIUM" else 0.45,
+                explanation=f"Automated seed prediction for {risk_level} risk report.",
+                review_priority=1 if risk_level == "HIGH" else 2 if risk_level == "MEDIUM" else 3,
+            )
+            db.add(prediction)
+            seeded += 1
         db.commit()
         total = db.query(Report).count()
-        logger.info("Seeded %d reports into database", total)
+        logger.info("Seeded %d reports (%d this run) into database", total, seeded)
+        return {"status": "ok", "count": total, "seeded": seeded}
+    except Exception as e:
+        db.rollback()
+        logger.error("Seed failed: %s", e)
+        return {"status": "error", "message": str(e)}
+    finally:
+        db.close()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Application lifespan: startup and shutdown events."""
+    logger.info("Starting %s v%s", settings.APP_NAME, settings.APP_VERSION)
+    init_db()
+    logger.info("Database initialized")
+
+    from app.ml.pipeline import prediction_service
+    prediction_service.load_model()
+    if prediction_service.is_loaded:
+        logger.info("ML model loaded successfully")
     else:
-        logger.info("Database has %d reports — skipping seed", existing)
-    db.close()
+        logger.warning("ML model not loaded — using rule-based predictions")
+
+    seed_result = _seed_database()
+    logger.info("Seed result: %s", seed_result)
 
     yield
     logger.info("Shutting down %s", settings.APP_NAME)
@@ -129,3 +161,9 @@ def root():
         "status": "running",
         "docs": "/docs",
     }
+
+
+@app.post("/api/v1/admin/seed", tags=["admin"])
+def admin_seed():
+    """Manually trigger database seeding. Useful for Render ephemeral storage."""
+    return _seed_database()
