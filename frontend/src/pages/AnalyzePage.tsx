@@ -14,6 +14,12 @@ const riskColors = {
   LOW: { bg: 'bg-success-500/10', border: 'border-success-500/25', text: 'text-success-500', dot: 'bg-success-500' },
 };
 
+const reportTypes = [
+  { value: 'unsafe_act', label: 'Unsafe Act' },
+  { value: 'unsafe_condition', label: 'Unsafe Condition' },
+  { value: 'near_miss', label: 'Near Miss' },
+];
+
 const demoReports = [
   {
     id: 'high-1',
@@ -79,6 +85,7 @@ export default function AnalyzePage() {
   const [error, setError] = useState('');
   const [demoMode, setDemoMode] = useState(false);
   const [activeDemo, setActiveDemo] = useState<string | null>(null);
+  const [fileError, setFileError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
@@ -116,6 +123,13 @@ export default function AnalyzePage() {
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setFileError('');
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setFileError(`File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed size is 10MB.`);
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => setText(ev.target?.result as string);
     reader.readAsText(file);
@@ -185,11 +199,14 @@ export default function AnalyzePage() {
               <select
                 value={reportType}
                 onChange={(e) => setReportType(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/5 text-white text-xs focus:outline-none focus:border-brand-500/30 transition-all"
+                className="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/5 text-white text-xs focus:outline-none focus:border-brand-500/30 transition-all appearance-none cursor-pointer"
+                style={{ colorScheme: 'dark' }}
               >
-                <option value="unsafe_act">Unsafe Act</option>
-                <option value="unsafe_condition">Unsafe Condition</option>
-                <option value="near_miss">Near Miss</option>
+                {reportTypes.map((t) => (
+                  <option key={t.value} value={t.value} className="bg-slate-900 text-white">
+                    {t.label}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -211,7 +228,7 @@ export default function AnalyzePage() {
               />
             </div>
           </div>
-          <input ref={fileRef} type="file" accept=".txt,.csv" className="hidden" onChange={handleFile} />
+          <input ref={fileRef} type="file" accept=".txt,.csv,.pdf,.doc,.docx" className="hidden" onChange={handleFile} />
           <button
             onClick={() => fileRef.current?.click()}
             className="btn-3d btn-3d-secondary py-2 px-4 text-xs"
@@ -219,6 +236,9 @@ export default function AnalyzePage() {
             <Upload className="w-3.5 h-3.5" />
             Upload
           </button>
+          {fileError && (
+            <span className="text-danger-500 text-[11px] font-medium">{fileError}</span>
+          )}
           <button
             onClick={handleSubmit}
             disabled={loading || !text.trim()}
