@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileSearch, Loader2, Upload, Shield, AlertTriangle,
   CheckCircle2, Lightbulb, Flag, MessageSquareWarning, AlertOctagon,
-  Play, Zap, Clock, Beaker,
+  Play, Zap, Clock, Beaker, ChevronDown,
 } from 'lucide-react';
 import { analyzeApi } from '../services/api';
 import type { AnalysisResult } from '../types';
@@ -86,7 +86,17 @@ export default function AnalyzePage() {
   const [demoMode, setDemoMode] = useState(false);
   const [activeDemo, setActiveDemo] = useState<string | null>(null);
   const [fileError, setFileError] = useState('');
+  const [typeOpen, setTypeOpen] = useState(false);
+  const typeRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (typeRef.current && !typeRef.current.contains(e.target as Node)) setTypeOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -196,18 +206,42 @@ export default function AnalyzePage() {
           <div className="flex gap-3 flex-wrap">
             <div>
               <label className="text-[10px] text-slate-500 uppercase tracking-wider font-bold block mb-1">Type</label>
-              <select
-                value={reportType}
-                onChange={(e) => setReportType(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-white/[0.04] border border-white/5 text-white text-xs focus:outline-none focus:border-brand-500/30 transition-all appearance-none cursor-pointer"
-                style={{ colorScheme: 'dark' }}
-              >
-                {reportTypes.map((t) => (
-                  <option key={t.value} value={t.value} className="bg-slate-900 text-white">
-                    {t.label}
-                  </option>
-                ))}
-              </select>
+              <div ref={typeRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setTypeOpen(!typeOpen)}
+                  className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/5 text-white text-xs text-left flex items-center justify-between gap-2 hover:border-white/10 transition-all"
+                >
+                  <span>{reportTypes.find((t) => t.value === reportType)?.label}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-slate-500 transition-transform ${typeOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {typeOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 right-0 mt-1 rounded-xl bg-slate-900 border border-white/10 shadow-xl shadow-black/50 z-50 overflow-hidden"
+                    >
+                      {reportTypes.map((t) => (
+                        <button
+                          key={t.value}
+                          type="button"
+                          onClick={() => { setReportType(t.value); setTypeOpen(false); }}
+                          className={`w-full px-3 py-2 text-xs text-left transition-colors ${
+                            reportType === t.value
+                              ? 'bg-brand-500/20 text-brand-400 font-semibold'
+                              : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                          }`}
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
             <div>
               <label className="text-[10px] text-slate-500 uppercase tracking-wider font-bold block mb-1">Site</label>
