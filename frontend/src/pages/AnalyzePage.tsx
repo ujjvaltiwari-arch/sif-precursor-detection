@@ -90,7 +90,9 @@ export default function AnalyzePage() {
   const typeRef = useRef<HTMLDivElement>(null);
   const typeBtnRef = useRef<HTMLButtonElement>(null);
   const [typeBtnRect, setTypeBtnRect] = useState<DOMRect | null>(null);
+  const [typeDropUp, setTypeDropUp] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -102,9 +104,21 @@ export default function AnalyzePage() {
 
   useEffect(() => {
     if (typeOpen && typeBtnRef.current) {
-      setTypeBtnRect(typeBtnRef.current.getBoundingClientRect());
+      const rect = typeBtnRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const dropUp = spaceBelow < 120;
+      setTypeBtnRect(rect);
+      setTypeDropUp(dropUp);
     }
   }, [typeOpen]);
+
+  useEffect(() => {
+    if (result) {
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+  }, [result]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -226,8 +240,14 @@ export default function AnalyzePage() {
                 </button>
                 {typeOpen && typeBtnRect && (
                   <div
-                    className="fixed rounded-xl bg-slate-900 border border-white/10 shadow-2xl shadow-black/60 z-[9999] overflow-hidden min-w-[160px]"
-                    style={{ top: typeBtnRect.bottom + 4, left: typeBtnRect.left, width: typeBtnRect.width }}
+                    className="fixed rounded-xl bg-slate-900 border border-white/10 shadow-2xl shadow-black/60 z-[9999] min-w-[160px]"
+                    style={{
+                      left: typeBtnRect.left,
+                      width: typeBtnRect.width,
+                      ...(typeDropUp
+                        ? { bottom: window.innerHeight - typeBtnRect.top + 4 }
+                        : { top: typeBtnRect.bottom + 4 }),
+                    }}
                   >
                     {reportTypes.map((t) => (
                       <button
@@ -312,6 +332,7 @@ export default function AnalyzePage() {
       )}
 
       {/* Results */}
+      <div ref={resultRef} />
       <AnimatePresence>
         {result && r && rc && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
