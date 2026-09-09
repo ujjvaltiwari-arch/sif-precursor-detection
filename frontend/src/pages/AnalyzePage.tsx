@@ -88,6 +88,8 @@ export default function AnalyzePage() {
   const [fileError, setFileError] = useState('');
   const [typeOpen, setTypeOpen] = useState(false);
   const typeRef = useRef<HTMLDivElement>(null);
+  const typeBtnRef = useRef<HTMLButtonElement>(null);
+  const [typeBtnRect, setTypeBtnRect] = useState<DOMRect | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -97,6 +99,12 @@ export default function AnalyzePage() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
+
+  useEffect(() => {
+    if (typeOpen && typeBtnRef.current) {
+      setTypeBtnRect(typeBtnRef.current.getBoundingClientRect());
+    }
+  }, [typeOpen]);
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
@@ -208,6 +216,7 @@ export default function AnalyzePage() {
               <label className="text-[10px] text-slate-500 uppercase tracking-wider font-bold block mb-1">Type</label>
               <div ref={typeRef} className="relative">
                 <button
+                  ref={typeBtnRef}
                   type="button"
                   onClick={() => setTypeOpen(!typeOpen)}
                   className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/5 text-white text-xs text-left flex items-center justify-between gap-2 hover:border-white/10 transition-all"
@@ -215,32 +224,27 @@ export default function AnalyzePage() {
                   <span>{reportTypes.find((t) => t.value === reportType)?.label}</span>
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-500 transition-transform ${typeOpen ? 'rotate-180' : ''}`} />
                 </button>
-                <AnimatePresence>
-                  {typeOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 right-0 mt-1 rounded-xl bg-slate-900 border border-white/10 shadow-xl shadow-black/50 z-50 overflow-hidden"
-                    >
-                      {reportTypes.map((t) => (
-                        <button
-                          key={t.value}
-                          type="button"
-                          onClick={() => { setReportType(t.value); setTypeOpen(false); }}
-                          className={`w-full px-3 py-2 text-xs text-left transition-colors ${
-                            reportType === t.value
-                              ? 'bg-brand-500/20 text-brand-400 font-semibold'
-                              : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                          }`}
-                        >
-                          {t.label}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {typeOpen && typeBtnRect && (
+                  <div
+                    className="fixed rounded-xl bg-slate-900 border border-white/10 shadow-2xl shadow-black/60 z-[9999] overflow-hidden min-w-[160px]"
+                    style={{ top: typeBtnRect.bottom + 4, left: typeBtnRect.left, width: typeBtnRect.width }}
+                  >
+                    {reportTypes.map((t) => (
+                      <button
+                        key={t.value}
+                        type="button"
+                        onClick={() => { setReportType(t.value); setTypeOpen(false); }}
+                        className={`w-full px-3 py-2.5 text-xs text-left transition-colors ${
+                          reportType === t.value
+                            ? 'bg-brand-500/20 text-brand-400 font-semibold'
+                            : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div>
@@ -263,13 +267,19 @@ export default function AnalyzePage() {
             </div>
           </div>
           <input ref={fileRef} type="file" accept=".txt,.csv,.pdf,.doc,.docx" className="hidden" onChange={handleFile} />
-          <button
-            onClick={() => fileRef.current?.click()}
-            className="btn-3d btn-3d-secondary py-2 px-4 text-xs"
-          >
-            <Upload className="w-3.5 h-3.5" />
-            Upload
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="btn-3d btn-3d-secondary py-2 px-4 text-xs"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              Upload
+            </button>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 rounded-lg bg-slate-800 border border-white/10 text-white text-[11px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-xl">
+              Upload file less than 10MB
+              <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-t-[5px] border-t-slate-800 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent" />
+            </div>
+          </div>
           {fileError && (
             <span className="text-danger-500 text-[11px] font-medium">{fileError}</span>
           )}
