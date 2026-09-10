@@ -154,7 +154,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'insights' | 'model' | 'chat'>('overview');
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState<{ role: string; text: string }[]>([
-    { role: 'ai', text: 'Hello! I\'m Anveshak AI Safety Assistant. How can I help you analyze SIF precursors today?' }
+    { role: 'ai', text: 'Hello! I\'m NexGuard AI Safety Assistant. How can I help you analyze SIF precursors today?' }
   ]);
 
   const handleChat = () => {
@@ -583,7 +583,7 @@ export default function DashboardPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass p-5 gradient-border">
           <div className="flex items-center gap-2 mb-4">
             <Bot className="w-5 h-5 text-brand-400" />
-            <h3 className="text-sm font-bold text-white">Anveshak AI Safety Assistant</h3>
+            <h3 className="text-sm font-bold text-white">NexGuard AI Safety Assistant</h3>
             <div className="ml-auto flex items-center gap-1.5 px-2 py-1 rounded-lg bg-success-500/10 border border-success-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
               <span className="text-[10px] font-bold text-success-500">ONLINE</span>

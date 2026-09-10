@@ -70,13 +70,13 @@ export default function DashboardLayout() {
         {/* Logo */}
         <Link to="/" className={`h-[64px] flex items-center border-b border-white/[0.08] px-4 shrink-0 no-underline hover:bg-white/[0.03] transition-colors ${collapsed ? 'justify-center' : 'gap-2.5'}`}>
           <img
-            src="/anveshak-logo.svg"
-            alt="Anveshak"
+            src="/nexguard-logo.svg"
+            alt="NexGuard"
             className="w-9 h-9 rounded-xl object-contain shadow-lg shadow-brand-500/30 shrink-0"
           />
           {!collapsed && (
             <span className="text-lg font-extrabold text-white tracking-wider whitespace-nowrap overflow-hidden">
-              Anve<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">shak</span>
+              Nex<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">Guard</span>
             </span>
           )}
         </Link>

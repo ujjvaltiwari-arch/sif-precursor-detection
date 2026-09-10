@@ -28,3 +28,4 @@ def print_confusion_matrix(metrics: dict[str, Any]) -> str:
         row_str = "  ".join(f"{v:>8}" for v in row)
         lines.append(f"{labels[i]:>8}  {row_str}")
     return "\n".join(lines)
+2v

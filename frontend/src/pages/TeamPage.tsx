@@ -27,7 +27,7 @@ export default function TeamPage() {
             Smart India Hackathon 2026
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Team <span className="gradient-text">Anveshak</span>
+            Team <span className="gradient-text">NexGuard</span>
           </h1>
           <p className="text-slate-400 text-sm max-w-lg mx-auto">
             Building the future of workplace safety intelligence through AI and innovation.

@@ -13,7 +13,7 @@ function PremiumFooter() {
       { label: 'Report History', to: '/reports' },
     ],
     project: [
-      { label: 'Team Anveshak', to: '/team' },
+      { label: 'Team NexGuard', to: '/team' },
       { label: 'Home', to: '/' },
     ],
     connect: [
@@ -35,12 +35,12 @@ function PremiumFooter() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5 mb-5">
               <img
-                src="/anveshak-logo.svg"
-                alt="Anveshak"
+                src="/nexguard-logo.svg"
+                alt="NexGuard"
                 className="w-10 h-10 rounded-xl object-contain shadow-lg shadow-brand-500/20"
               />
               <span className="text-xl font-extrabold text-white tracking-wider">
-                Anve<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">shak</span>
+                Nex<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">Guard</span>
               </span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed max-w-sm mb-6">
@@ -117,7 +117,7 @@ function PremiumFooter() {
         <div className="border-t border-white/[0.04] pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-slate-600 text-xs flex items-center gap-1">
-              &copy; 2026 Team Anveshak. Built with <Heart className="w-3 h-3 text-danger-500 fill-danger-500" /> for SIH 2026
+              &copy; 2026 Team NexGuard. Built with <Heart className="w-3 h-3 text-danger-500 fill-danger-500" /> for SIH 2026
             </p>
             <button
               onClick={scrollToTop}

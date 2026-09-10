@@ -603,7 +603,7 @@ export default function LandingPage() {
               <span className="text-[11px] font-semibold text-purple-400 tracking-wider uppercase">Our Team</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-white/95 mb-6 tracking-tight leading-tight text-center">
-              Built by <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Anveshak</span>
+              Built by <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">NexGuard</span>
             </h2>
             <p className="text-base sm:text-lg text-white/50 leading-relaxed text-center max-w-[800px] mx-auto">
               A multidisciplinary team combining AI/ML engineering, oil & gas domain expertise, and full-stack development.

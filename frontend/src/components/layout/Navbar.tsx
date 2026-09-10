@@ -39,13 +39,13 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 no-underline group shrink-0">
           <img
-            src="/anveshak-logo.svg"
-            alt="Anveshak"
+            src="/nexguard-logo.svg"
+            alt="NexGuard"
             className="w-9 h-9 rounded-xl object-contain shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/40 transition-all duration-300 group-hover:scale-105"
           />
           <div className="flex flex-col">
             <span className="text-lg font-extrabold text-white tracking-wider leading-none">
-              Anve<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">shak</span>
+              Nex<span className="bg-gradient-to-r from-brand-400 to-blue-400 bg-clip-text text-transparent">Guard</span>
             </span>
             <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-[0.2em] leading-none mt-0.5">AI Safety Intelligence</span>
           </div>
